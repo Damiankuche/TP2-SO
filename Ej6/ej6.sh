@@ -7,13 +7,18 @@ fi
 cont=0
 declare -A cantidades
 dir=$1
-for a in $(ls -UAR $dir);do
-	 	
+cantidades=`ls -Rsh $dir`
+for a in `ls -RA $dir `;do
+	if [ ! -d $a ]; then
 		((cont++))
-		  echo $a
-	 
+		echo $a
+	else
+		basename $a
+		echo ""
+	fi
 done
 echo
 echo $cont
+
 
 
