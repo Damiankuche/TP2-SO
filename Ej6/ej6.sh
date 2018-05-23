@@ -1,7 +1,15 @@
 #!/bin/bash
 
-flagf=0
-declare -A array
+: '  
+    Nombre del script: ej3.sh
+    Trabajo Practico 2 - Ejercicio 3
+    Grupo: 6
+    Gómez Markowicz, Federico - 38858109
+    Kuczerawy, Damián - 37807869
+    Mediotte, Facundo - 39436162
+    Siculin, Luciano - 39213320
+    Tamashiro, Santiago - 39749147
+'
 
 get_help() {
 	echo 'Comando ayuda:'
@@ -41,17 +49,15 @@ fi
 
 validar $1 $2 $3
 dir=$1
-if [ -f "lista.txt" ];then
-	rm "lista.txt"
-fi
 aux=0
-if [ $# -eq 2 ] ;then
+if [ $# -eq 2 ] ;then	#comprueba si se envio el parametro -f
 	if [ $2 = '-f' ] ;then
 		IFS='
 		'
 	fi
 fi
-for arch in $(find $dir -type d) 
+
+for arch in $(find $dir -type d)
 do	
 	size=0
 	cont=0
@@ -60,19 +66,17 @@ do
 		(( cont++ ))
 		if [ -d $a -a $cont -ne 1 ] ;then
 			aux=1
-			#echo "$aux $a"
+			
 		else
-			cont=`ls $arch | wc -l`
-			size=`du -sb -h $arch | cut -f1`
-			#echo "$aux $a"
+			cont=`ls $arch | wc -l` #cantidad de archivos por carpeta
+			size=`du -sb -h $arch | cut -f1` #tamaño de la carpeta
+            
+			
 		fi	
 	done
-	if [ $aux -eq 0 -a $cont -ge 1 ] ;then
-		echo "$(dirname $a) $size  $cont arch" >> lista.txt
+	if [ $aux -eq 0 -a $cont -ge 1 ] ;then #verificar que no hubo carpetas dentro de esa carpeta
+		echo "$(dirname $a), $size, $cont arch" #y que las carpetas no estaban vacías
 	fi
 	aux=0
 	cont=0
-done
-
-
-
+done | sort -t, -k 2 -rh | head -10 
