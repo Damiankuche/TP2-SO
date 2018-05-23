@@ -40,22 +40,33 @@ fi
 }
 
 validar $1 $2 $3
-cont=0
 dir=$1
-if [ $#  -eq 2 ] ;then
+rm "lista.txt"
+if [ $# -eq 2 ] ;then
 	if [ $2 = '-f' ] ;then
-		flagf=1
+		IFS='
+		'
 	fi
 fi
 for arch in $(find $dir -type d) 
-do
-	if [ -d $arch ] ;then
-		ls $arch | wc -l 
-		du -sh $arch 
-		array[$arch]=$a
-		#echo "$arch ${array[$arch]}"
-		#ls $arch | wc -l
-	fi	
+do	
+	size=0
+	cont=0
+	aux=0
+	for a in $(find $arch -maxdepth 1)
+		do
+		if [ -d $a ] ;then
+			aux=1
+			echo "$a carpeta"
+		else
+			cont=`ls $arch | wc -l`
+			size=`du -sb -h $arch | cut -f1`
+			echo "$a archivo"
+		fi	
+	done
+	#if [ $aux -eq 0 ] ;then
+		echo "$(dirname $a) $size  $cont arch" >> lista.txt
+	#fi
 done
 
 
